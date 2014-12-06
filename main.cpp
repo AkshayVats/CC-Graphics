@@ -141,10 +141,10 @@ struct Mat44{
 		memset(m, 0, sizeof(m));
 		m[0][0] = m[1][1] = m[2][2] = m[3][3] = 1;
 	}
-	
+
 	Mat44 operator *(Mat44 &b){
 		Mat44 r;
-		for (int i = 0; i < 4;i++)
+		for (int i = 0; i < 4; i++)
 		for (int j = 0; j < 4; j++){
 			r[i][j] = 0;
 			for (int k = 0; k < 4; k++)
@@ -154,7 +154,7 @@ struct Mat44{
 		return r;
 	}
 
-	static Mat44 CreateTraslation(T x, T y, T z=0){
+	static Mat44 CreateTraslation(T x, T y, T z = 0){
 		Mat44 r;
 		//memset(r.m, 0, sizeof(r.m));
 		r.m[0][3] += x;
@@ -176,7 +176,7 @@ struct Mat44{
 		y[2][0] = -y[0][2];
 		return x*y*z;
 	}
-	static Mat44 CreateScaling(double sx, double sy, double sz=1){
+	static Mat44 CreateScaling(double sx, double sy, double sz = 1){
 		MATRIX r;
 		r[0][0] = sx;
 		r[1][1] = sy;
@@ -194,7 +194,7 @@ struct Vector3{
 	Vector3(){
 		x = y = z = 0;
 	}
-	Vector3(T x, T y, T z=0) {
+	Vector3(T x, T y, T z = 0) {
 		this->x = x;
 		this->y = y;
 		this->z = z;
@@ -220,7 +220,7 @@ void DrawQuad(POINT &p, MATRIX &tr){
 	PutPixel(p*tr); PutPixel(POINT(p.x, -p.y)*tr); PutPixel(POINT(-p.x, -p.y)*tr); PutPixel(POINT(-p.x, p.y)*tr);
 }
 void ellipse(Vector3<int> axis, MATRIX &transform){
-	
+
 	Vector3<int> pt(0, axis.y);
 	int a2 = axis.x*axis.x, b2 = axis.y*axis.y;
 	int p = b2 + a2 / 4 - axis.y;
@@ -257,7 +257,7 @@ int ncr(int n, int r){
 	for (int i = 2; i <= n - r; i++)rr /= i;
 	return rr;
 }
-void bezier(std::vector<POINT> &controls, int m, bool showControls=false){
+void bezier(std::vector<POINT> &controls, int m, bool showControls = false){
 	int n = controls.size();
 	m = m*n;
 	if (showControls){
@@ -265,14 +265,14 @@ void bezier(std::vector<POINT> &controls, int m, bool showControls=false){
 		for (int i = 0; i < n; i++)PutPixel(controls[i]);
 		COLOR = 0xffffff;
 	}
-	
+
 	int *c = new int[n];
-	for (int i = 0; i < n; i++)c[i] = ncr(n-1, i);
+	for (int i = 0; i < n; i++)c[i] = ncr(n - 1, i);
 	for (int i = 0; i <= m; i++){
 		float u = i / (float)m;
 		POINT p;
 		for (int k = 0; k < n; k++){
-			float blend = c[k] * std::powf(u, k)*std::powf(1-u, n - k-1);
+			float blend = c[k] * std::powf(u, k)*std::powf(1 - u, n - k - 1);
 			p.x += controls[k].x*blend;
 			p.y += controls[k].y*blend;
 			p.z += controls[k].z*blend;
@@ -315,7 +315,7 @@ void illustraion_pendulum(){
 
 	//ITS All About MATRIX !!
 
-	if (GetKeyState(37)) 
+	if (GetKeyState(37))
 		View = View*MATRIX::CreateTraslation(1, 0);
 }
 void illustration_shear(){
@@ -333,12 +333,12 @@ void illustration_shear(){
 
 }
 void illustration_inclinedEllipse(){
-	static double a1, a2=PI/3, a3=-PI/3;
-	Model = MATRIX::CreateRotation(0,PI/2,0);
+	static double a1, a2 = PI / 3, a3 = -PI / 3;
+	Model = MATRIX::CreateRotation(0, PI / 2, 0);
 	ellipse(POINT(70, 200), Model*View);
-	Model = MATRIX::CreateRotation(PI/3,PI/2,0);
+	Model = MATRIX::CreateRotation(PI / 3, PI / 2, 0);
 	ellipse(POINT(70, 200), Model*View);
-	Model = MATRIX::CreateRotation(-PI/3, PI/2, 0);
+	Model = MATRIX::CreateRotation(-PI / 3, PI / 2, 0);
 	ellipse(POINT(70, 200), Model*View);
 
 	Model = MATRIX::CreateTraslation(70 * cos(a1), 200 * sin(a1))*MATRIX::CreateRotation(0, PI / 2, 0);
@@ -354,10 +354,10 @@ void illustration_inclinedEllipse(){
 }
 void illustration_reflection(){
 	static double sx = 1;
-	lineDDA(150, MATRIX::CreateRotation(0, 0, PI/4)*MATRIX::CreateTraslation(300,300));
+	lineDDA(150, MATRIX::CreateRotation(0, 0, PI / 4)*MATRIX::CreateTraslation(300, 300));
 	lineDDA(30, MATRIX::CreateRotation(0, 0, PI / 3)*MATRIX::CreateTraslation(300 - 50, 300 + 20)*MATRIX::CreateTraslation(-300, -300)*MATRIX::CreateRotation(0, 0, -PI / 4)*MATRIX::CreateScaling(1, sx)*MATRIX::CreateRotation(0, 0, PI / 4)*MATRIX::CreateTraslation(300, 300));
 	sx += 0.001;
-	
+
 }
 void illustration_bezier(){
 	std::vector<POINT> ctrl;
@@ -372,7 +372,7 @@ int frames = 0;
 
 
 std::vector<std::vector<POINT> > curves;
-int cur_curve=-1, cur_point=-1;
+int cur_curve = -1, cur_point = -1;
 int delay;
 bool KD(int key){
 	return ((1 << 16)&GetAsyncKeyState(key));
@@ -388,7 +388,7 @@ void save(){
 		}
 		f << "bezier(c, 20);";
 	}
-	
+
 	f.close();
 }
 void preGenCurves(){
@@ -439,7 +439,7 @@ void preGenCurves(){
 	c.push_back(POINT(202, 76));
 	c.push_back(POINT(246, 78));
 	bezier(c, 20); c.clear();
-    c.push_back(POINT(247, 27));
+	c.push_back(POINT(247, 27));
 	c.push_back(POINT(247, 99));
 	bezier(c, 20); c.clear()
 		; c.push_back(POINT(31, 28));
@@ -459,7 +459,7 @@ void editor(){
 				cur_curve++;
 				cur_point = -1;
 			}
-			else if(cur_curve>=0){
+			else if (cur_curve >= 0){
 				if (curves[cur_curve].size() == 0)curves[cur_curve].push_back(POINT(0, 0));
 				else curves[cur_curve].insert(curves[cur_curve].begin() + cur_point + 1, POINT(curves[cur_curve][cur_point]));
 				cur_point++;
@@ -484,32 +484,32 @@ void editor(){
 			}
 		}
 		if (curves.size() > 0){
-			if (KD('Q'))cur_curve = (cur_curve - 1 + curves.size()) % curves.size(), delay = 100, cur_point=curves[cur_curve].size()>0?0:-1;
+			if (KD('Q'))cur_curve = (cur_curve - 1 + curves.size()) % curves.size(), delay = 100, cur_point = curves[cur_curve].size()>0 ? 0 : -1;
 			if (KD('W'))cur_curve = (cur_curve + 1) % curves.size(), delay = 100, cur_point = curves[cur_curve].size()>0 ? 0 : -1;
 		}
-		if (cur_curve>=0&&curves[cur_curve].size() > 0){
+		if (cur_curve >= 0 && curves[cur_curve].size() > 0){
 			if (KD('1'))cur_point = (cur_point - 1 + curves[cur_curve].size()) % curves[cur_curve].size(), delay = 100;
 			if (KD('2'))cur_point = (cur_point + 1) % curves[cur_curve].size(), delay = 100;
-			
+
 		}
 	}
 	delay--;
 	COLOR = 0x00ff00;
 	if (cur_curve >= 0 && cur_point >= 0)circle(curves[cur_curve][cur_point].x, curves[cur_curve][cur_point].y, 3);
 	COLOR = 0xffffff;
-	for (int i = 0; i < curves.size();i++)
-	bezier(curves[i], 20, i==cur_curve);
+	for (int i = 0; i < curves.size(); i++)
+		bezier(curves[i], 20, i == cur_curve);
 }
 int Update(HDC hdc){
 	static int y;
 	static double ar;
 	::hdc = hdc;
-	View = MATRIX::CreateRotation(0,ar,0)*MATRIX::CreateTraslation(300, 300);
-	editor();
+	View = MATRIX();// MATRIX::CreateRotation(0, 0, 0)*MATRIX::CreateTraslation(300, 300);
+	illustration_shear();
 	ar += 0.01;
 	return 0;
 }
 
 void Event(UINT message, WPARAM wParam, LPARAM lParam){
-	
+
 }

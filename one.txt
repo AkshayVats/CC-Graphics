@@ -1,0 +1,4 @@
+curves.push_back(std::vector<Point>());
+	curves[curves.size() - 1].push_back(Point(63, 72));
+	curves[curves.size() - 1].push_back(Point(418, 74));
+	curves[curves.size() - 1].push_back(Point(419, 74));
