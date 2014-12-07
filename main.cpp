@@ -380,74 +380,26 @@ bool KD(int key){
 void save(){
 	std::ofstream f("curves.txt");
 	f << "//--------By AV-------------" << std::endl;
-	f << "std::vector<POINT> c;\n";
 	for (auto &i : curves){
-		f << "c.clear();\n";
+		f << "curves.push_back(std::vector<POINT>());\n";
 		for (auto &j : i){
-			f << "c.push_back(POINT(" << j.x << ", " << j.y << "));\n";
+			f << "curves[curves.size()-1].push_back(POINT(" << j.x << ", " << j.y << "));\n";
 		}
-		f << "bezier(c, 20);";
+		
 	}
-
+	f << "cur_curve = " << cur_curve << ";\n";
+	f << "cur_point = " << cur_point << ";\n";
 	f.close();
 }
 void preGenCurves(){
 	//--------By AV-------------
-	std::vector<POINT> c;
-	c.clear()
-		; c.push_back(POINT(37, 41));
-	c.push_back(POINT(38, 23));
-	c.push_back(POINT(87, 25));
-	c.push_back(POINT(72, 49));
-	c.push_back(POINT(54, 60));
-	bezier(c, 20); c.clear();
-	c.push_back(POINT(54, 59));
-	c.push_back(POINT(80, 69));
-	c.push_back(POINT(80, 81));
-	c.push_back(POINT(58, 107));
-	c.push_back(POINT(31, 66));
-	bezier(c, 20); c.clear();
-	c.push_back(POINT(54, 59));
-	c.push_back(POINT(94, 59));
-	bezier(c, 20); c.clear();
-	c.push_back(POINT(93, 29));
-	c.push_back(POINT(93, 87));
-	bezier(c, 20); c.clear();
-	c.push_back(POINT(173, 30));
-	c.push_back(POINT(173, 89));
-	bezier(c, 20); c.clear();
-	c.push_back(POINT(173, 58));
-	c.push_back(POINT(130, 59));
-	c.push_back(POINT(111, 25));
-	c.push_back(POINT(152, 19));
-	c.push_back(POINT(160, 32));
-	c.push_back(POINT(127, 57));
-	bezier(c, 20); c.clear();
-	c.push_back(POINT(127, 55));
-	c.push_back(POINT(93, 89));
-	c.push_back(POINT(168, 105));
-	c.push_back(POINT(153, 72));
-	c.push_back(POINT(143, 60));
-	c.push_back(POINT(109, 77));
-	c.push_back(POINT(157, 93));
-	bezier(c, 20); c.clear();
-	c.push_back(POINT(200, 30));
-	c.push_back(POINT(222, 17));
-	c.push_back(POINT(253, 46));
-	c.push_back(POINT(222, 48));
-	c.push_back(POINT(171, 71));
-	c.push_back(POINT(202, 76));
-	c.push_back(POINT(246, 78));
-	bezier(c, 20); c.clear();
-	c.push_back(POINT(247, 27));
-	c.push_back(POINT(247, 99));
-	bezier(c, 20); c.clear()
-		; c.push_back(POINT(31, 28));
-	c.push_back(POINT(125, 28));
-	bezier(c, 20); c.clear()
-		; c.push_back(POINT(148, 28));
-	c.push_back(POINT(275, 28));
-	bezier(c, 20);
+	curves.push_back(std::vector<POINT>());
+	curves[curves.size() - 1].push_back(POINT(27, 27));
+	curves[curves.size() - 1].push_back(POINT(75, 75));
+	curves[curves.size() - 1].push_back(POINT(33, 118));
+	cur_curve = 0;
+	cur_point = 2;
+
 }
 void editor(){
 	preGenCurves();
@@ -505,7 +457,8 @@ int Update(HDC hdc){
 	static double ar;
 	::hdc = hdc;
 	View = MATRIX();// MATRIX::CreateRotation(0, 0, 0)*MATRIX::CreateTraslation(300, 300);
-	illustration_shear();
+	//illustration_shear();
+	editor();
 	ar += 0.01;
 	return 0;
 }
