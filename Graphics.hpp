@@ -118,12 +118,13 @@ int WINAPI WinMain(HINSTANCE hInstance,
 
 	// Main message loop:
 	MSG msg;
+	Start();
 	while (GetMessage(&msg, NULL, 0, 0))
 	{
 		TranslateMessage(&msg);
 		DispatchMessage(&msg);
 	}
-	Start();
+	
 	return (int)msg.wParam;
 }
 

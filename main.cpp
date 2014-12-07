@@ -293,9 +293,7 @@ double ell_angle, line_angle;
 
 int ticks;
 long st;
-void Start(){
-	st = time(0);
-}
+
 
 void illustraion_pendulum(){
 	Model = MATRIX::CreateRotation(0, 0, ell_angle)*MATRIX::CreateTraslation(300, 30);
@@ -402,7 +400,6 @@ void preGenCurves(){
 
 }
 void editor(){
-	preGenCurves();
 	if (delay <= 0){
 		delay = 10;
 		if (KD('N')){
@@ -464,5 +461,10 @@ int Update(HDC hdc){
 }
 
 void Event(UINT message, WPARAM wParam, LPARAM lParam){
+
+}
+void Start(){
+	st = time(0);
+	preGenCurves();
 
 }
